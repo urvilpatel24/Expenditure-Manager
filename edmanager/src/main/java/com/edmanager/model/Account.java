@@ -35,4 +35,12 @@ public class Account {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_users_fk",nullable = false)
     private Users user;
+
+	public Account(String name, double currentBalance, Users user) {
+		super();
+		this.name = name;
+		this.currentBalance = currentBalance;
+		this.user = user;
+	}
+	
 }
