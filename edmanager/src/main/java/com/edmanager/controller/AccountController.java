@@ -7,12 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edmanager.model.Account;
+import com.edmanager.model.Response;
 import com.edmanager.model.Users;
 import com.edmanager.repository.AccountRepository;
 import com.edmanager.repository.UsersRepository;
+import com.edmanager.util.Constants;
 
 @RestController
 @RequestMapping("/account")
@@ -26,8 +29,9 @@ public class AccountController {
 	@Autowired
     private UsersRepository usersRepository;
 	
-	@GetMapping("/insert")
-    public ResponseEntity<?> addAccount(@RequestParam("name") String name, @RequestParam("balance") double currentBalance, @RequestParam("userId") long userId) {
+	@ResponseBody
+	@GetMapping("/add")
+    public ResponseEntity<Response> addAccount(@RequestParam("name") String name, @RequestParam("balance") double currentBalance, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
@@ -36,15 +40,16 @@ public class AccountController {
 				account = accountRepository.save(account);
 				logger.info("New account has been created for user="+user.getName()+", act-name="+account.getName());
 			}
-			return ResponseEntity.ok("Success");
+			return ResponseEntity.ok(new Response(Constants.SUCCESS,account.getName()+" has been added.",account));
 		}catch(Exception e) {
 			logger.error("Exception in addAccount API", e);
 			return ResponseEntity.ok(null);
 		}
     }
 	
+	@ResponseBody
 	@GetMapping("/edit")
-    public ResponseEntity<?> editAccount(@RequestParam("oldName") String oldName,@RequestParam("newName") String newName, @RequestParam("userId") long userId) {
+    public ResponseEntity<Response> editAccount(@RequestParam("oldName") String oldName,@RequestParam("newName") String newName, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
@@ -54,15 +59,16 @@ public class AccountController {
 				account = accountRepository.save(account);
 				logger.info("Account has been edited for user="+user.getName()+", act-name="+account.getName());
 			}
-			return ResponseEntity.ok("Success");
+			return ResponseEntity.ok(new Response(Constants.SUCCESS,"Account name has been changed to "+account.getName(),account));
 		}catch(Exception e) {
 			logger.error("Exception in editAccount API", e);
 			return ResponseEntity.ok(null);
 		}
     }
 	
+	@ResponseBody
 	@GetMapping("/delete")
-    public ResponseEntity<?> deleteAccount(@RequestParam("name") String name, @RequestParam("userId") long userId) {
+    public ResponseEntity<Response> deleteAccount(@RequestParam("name") String name, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
@@ -71,7 +77,7 @@ public class AccountController {
 				accountRepository.delete(account);
 				logger.info("Account has been deleted for user="+user.getName()+", act-name="+name);
 			}
-			return ResponseEntity.ok("Success");
+			return ResponseEntity.ok(new Response(Constants.SUCCESS,account.getName()+" has been deleted.",account));
 		}catch(Exception e) {
 			logger.error("Exception in deleteAccount API", e);
 			return ResponseEntity.ok(null);
