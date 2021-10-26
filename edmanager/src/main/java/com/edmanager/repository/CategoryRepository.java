@@ -10,5 +10,5 @@ import com.edmanager.model.Category;
 @Repository
 @Transactional(rollbackOn = Throwable.class)
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-
+	public Category findByName(String name);
 }
