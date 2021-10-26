@@ -10,5 +10,5 @@ import com.edmanager.model.Users;
 @Repository
 @Transactional(rollbackOn = Throwable.class)
 public interface UsersRepository  extends JpaRepository<Users, Long> {
-
+	
 }

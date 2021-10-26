@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "sub_category", uniqueConstraints = { @UniqueConstraint(name = "sub_category_uk",columnNames = {"name", "category_fk"}) })
+@Table(name = "sub_category", uniqueConstraints = { @UniqueConstraint(name = "sub_category_uk",columnNames = {"name", "category_fk", "user_fk"}) })
 @Getter @Setter @NoArgsConstructor @ToString
 public class SubCategory {
 
@@ -32,4 +32,8 @@ public class SubCategory {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_fk",nullable = false)
     private Category category;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "users_fk",nullable = false)
+    private Users user;
 }

@@ -32,4 +32,5 @@ public class Category {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_users_fk",nullable = false)
     private Users user;
+
 }

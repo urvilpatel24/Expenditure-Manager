@@ -1,5 +1,7 @@
 package com.edmanager.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +13,6 @@ import com.edmanager.model.Account;
 @Transactional(rollbackOn = Throwable.class)
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-	public Account findByName(String name);
+	public Account findByNameAndUser_Id(String name, long userId);
+	public List<Account> findAllByUser_id(long userId);
 }
