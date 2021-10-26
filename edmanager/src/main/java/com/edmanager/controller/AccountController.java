@@ -54,7 +54,7 @@ public class AccountController {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
 			if(user != null) {
-				account = accountRepository.findByName(oldName);
+				account = accountRepository.findByNameAndUser_Id(oldName, userId);
 				account.setName(newName);
 				account = accountRepository.save(account);
 				logger.info("Account has been edited for user="+user.getName()+", act-name="+account.getName());
@@ -73,7 +73,7 @@ public class AccountController {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
 			if(user != null) {
-				account = accountRepository.findByName(name);
+				account = accountRepository.findByNameAndUser_Id(name, userId);
 				accountRepository.delete(account);
 				logger.info("Account has been deleted for user="+user.getName()+", act-name="+name);
 			}

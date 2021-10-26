@@ -11,5 +11,5 @@ import com.edmanager.model.Account;
 @Transactional(rollbackOn = Throwable.class)
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-	public Account findByName(String name);
+	public Account findByNameAndUser_Id(String name, long userId);
 }
