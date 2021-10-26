@@ -33,33 +33,4 @@ public class Category {
     @JoinColumn(name = "category_users_fk",nullable = false)
     private Users user;
 
-	public Category(String str) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
-	
-	
 }
