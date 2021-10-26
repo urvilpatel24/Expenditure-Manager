@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +31,19 @@ public class AccountController {
     private UsersRepository usersRepository;
 	
 	@ResponseBody
-	@GetMapping("/add")
+	@GetMapping("/getAll")
+    public ResponseEntity<Response> getAll(@RequestParam("userId") long userId){
+		try {
+			logger.info("Get All accounts for current user.");
+			return ResponseEntity.ok(new Response(Constants.SUCCESS,"",accountRepository.findAllByUser_id(userId)));
+		}catch(Exception e) {
+			logger.error("Exception in getAll API", e);
+			return ResponseEntity.ok(null);
+		}
+    }
+	
+	@ResponseBody
+	@PostMapping("/add")
     public ResponseEntity<Response> addAccount(@RequestParam("name") String name, @RequestParam("balance") double currentBalance, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
@@ -48,7 +61,7 @@ public class AccountController {
     }
 	
 	@ResponseBody
-	@GetMapping("/edit")
+	@PostMapping("/edit")
     public ResponseEntity<Response> editAccount(@RequestParam("oldName") String oldName,@RequestParam("newName") String newName, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
@@ -67,7 +80,7 @@ public class AccountController {
     }
 	
 	@ResponseBody
-	@GetMapping("/delete")
+	@PostMapping("/delete")
     public ResponseEntity<Response> deleteAccount(@RequestParam("name") String name, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
