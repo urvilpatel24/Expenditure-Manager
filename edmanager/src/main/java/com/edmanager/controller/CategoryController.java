@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edmanager.model.Account;
 import com.edmanager.model.Category;
 import com.edmanager.model.Users;
 import com.edmanager.repository.CategoryRepository;
@@ -33,12 +32,9 @@ public class CategoryController {
 			Users user = usersRepository.getById(userId);
 			Category category = null;
 			if(user != null) {
-				category = new Category(name);
+				category = new Category();
 				category = categoryRepository.save(category);
 				logger.info("New category has been created for user="+user.getName());
-				//account = new Account(name, currentBalance, user); 
-				//account = accountRepository.save(account);
-				//logger.info("New account has been created for user="+user.getName()+", act-name="+account.getName());
 			}
 			return ResponseEntity.ok("Success");
 		}catch(Exception e) {
@@ -56,15 +52,10 @@ public class CategoryController {
 				category.setName(newName);
 				category = categoryRepository.save(category);
 				logger.info("Category has been edited for user="+user.getName()+",cat-name="+category.getName());
-				
-//				account = accountRepository.findByName(oldName);
-//				account.setName(newName);
-//				account = accountRepository.save(account);
-//				logger.info("Account has been edited for user="+user.getName()+", act-name="+account.getName());
 			}
 			return ResponseEntity.ok("Success");
 		}catch(Exception e) {
-			logger.error("Exception in editAccount API", e);
+			logger.error("Exception in editCategory API", e);
 			return ResponseEntity.ok(null);
 		}
     }
