@@ -1,9 +1,10 @@
 package com.edmanager.controller;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,19 +33,19 @@ public class CategoryController {
 	
 	@ResponseBody
 	@GetMapping("/getAll")
-    public ResponseEntity<Response> getAll(@RequestParam("userId") long userId){
+    public Response getAll(@RequestParam("userId") long userId){
 		try {
 			logger.info("Get All categories for current user.");
-			return ResponseEntity.ok(new Response(Constants.SUCCESS,"",categoryRepository.findAllByUser_ID(userId)));
+			return new Response(Constants.SUCCESS,"",categoryRepository.findAllByUser_Id(userId));
 		}catch(Exception e) {
 			logger.error("Exception in getAll API", e);
-			return ResponseEntity.ok(null);
+			return null;
 		}
     }
 	
 	@ResponseBody
-	@PostMapping("/add")
-    public ResponseEntity<Response> addCategory(@RequestParam("name") String name, @RequestParam("userId") long userId){
+	@GetMapping("/add")
+    public Response addCategory(@RequestParam("name") String name, @RequestParam("userId") long userId){
 		try {
 			Users user = usersRepository.getById(userId);
 			Category category = null;
@@ -55,16 +56,16 @@ public class CategoryController {
 				category = categoryRepository.save(category);
 				logger.info("New category has been created for user="+user.getName()+", category-name = "+category.getName());
 			}
-			return ResponseEntity.ok(new Response(Constants.SUCCESS,category.getName()+" has been added.",category));
+			return new Response(Constants.SUCCESS,category.getName()+" has been added.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addCategory API", e);
-			return ResponseEntity.ok(null);
+			return null;
 		}
     }
 	
 	@ResponseBody
 	@PostMapping("/edit")
-    public ResponseEntity<Response> editCategory(@RequestParam("oldName") String oldName,@RequestParam("newName") String newName, @RequestParam("userId") long userId) {
+    public Response editCategory(@RequestParam("oldName") String oldName,@RequestParam("newName") String newName, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
 			Category category = null;
@@ -74,16 +75,16 @@ public class CategoryController {
 				category = categoryRepository.save(category);
 				logger.info("Category has been edited for user="+user.getName()+",category-name="+category.getName());
 			}
-			return ResponseEntity.ok(new Response(Constants.SUCCESS,"Category name has been changed to "+category.getName(),category));
+			return new Response(Constants.SUCCESS,"Category name has been changed to "+category.getName(),null);
 		}catch(Exception e) {
 			logger.error("Exception in editCategory API", e);
-			return ResponseEntity.ok(null);
+			return null;
 		}
     }
 
 	@ResponseBody
 	@PostMapping("/delete")
-    public ResponseEntity<Response> deleteCategory(@RequestParam("name") String name, @RequestParam("userId") long userId) {
+    public Response deleteCategory(@RequestParam("name") String name, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
 			Category category = null;
@@ -92,10 +93,10 @@ public class CategoryController {
 				categoryRepository.delete(category);
 				logger.info("Category has been deleted for user="+user.getName()+", act-name="+name);
 			}
-			return ResponseEntity.ok(new Response(Constants.SUCCESS,category.getName()+" has been deleted.",category));
+			return new Response(Constants.SUCCESS,category.getName()+" has been deleted.",null);
 		}catch(Exception e) {
 			logger.error("Exception in deleteCategory API", e);
-			return ResponseEntity.ok(null);
+			return null;
 		}
     }
 }
