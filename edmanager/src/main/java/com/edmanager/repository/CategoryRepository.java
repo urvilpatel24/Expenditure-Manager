@@ -13,5 +13,5 @@ import com.edmanager.model.Category;
 @Transactional(rollbackOn = Throwable.class)
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	public Category findByNameAndUser_Id(String name, long userId);
-	public List<Category> findAllByUser_ID(long userId);
+	public List<Category> findAllByUser_Id(long userId);
 }
