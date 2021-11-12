@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edmanager.model.Category;
 import com.edmanager.model.Response;
+import com.edmanager.model.SubCategory;
 import com.edmanager.model.Users;
 import com.edmanager.repository.CategoryRepository;
+import com.edmanager.repository.SubCategoryRepository;
 import com.edmanager.repository.UsersRepository;
 import com.edmanager.util.Constants;
 
@@ -25,6 +27,9 @@ public class CategoryController {
 	
 	@Autowired
     private CategoryRepository categoryRepository;
+	
+	@Autowired
+    private SubCategoryRepository subCategoryRepository;
 
 	@Autowired
     private UsersRepository usersRepository;
@@ -53,6 +58,13 @@ public class CategoryController {
 				category.setUser(user);
 				category = categoryRepository.save(category);
 				logger.info("New category has been created for user="+user.getName()+", category-name = "+category.getName());
+				
+				// Add default subcategory
+				SubCategory subCategory = new SubCategory();
+				subCategory.setCategory(category);
+				subCategory.setName("Other");
+				subCategory.setUser(user);
+				subCategoryRepository.save(subCategory);
 			}
 			return new Response(Constants.SUCCESS,category.getName()+" has been added.",null);
 		}catch(Exception e) {

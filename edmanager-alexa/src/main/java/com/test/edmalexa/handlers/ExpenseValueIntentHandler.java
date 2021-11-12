@@ -57,6 +57,7 @@ public class ExpenseValueIntentHandler implements RequestHandler {
     			
 	        	if(currentModule.equalsIgnoreCase("expense")) 
 	        	{
+	        		speechText = "date is "+date+", amount is "+amount+" category is "+category+" sub is "+subCategory+ " account is "+account;
 	        		/*if(currentAction.equalsIgnoreCase("add") || currentAction.equalsIgnoreCase("insert")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/expense/add?userId=1&name="+value+"&parentName="+parentCategory);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
