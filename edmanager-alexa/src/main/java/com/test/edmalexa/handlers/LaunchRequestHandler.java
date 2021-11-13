@@ -1,13 +1,13 @@
 package com.test.edmalexa.handlers;
 
+import static com.amazon.ask.request.Predicates.requestType;
+
+import java.util.Optional;
+
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.LaunchRequest;
 import com.amazon.ask.model.Response;
-
-import java.util.Optional;
-
-import static com.amazon.ask.request.Predicates.requestType;
 
 public class LaunchRequestHandler implements RequestHandler {
 
@@ -16,6 +16,7 @@ public class LaunchRequestHandler implements RequestHandler {
     }
 
     public Optional<Response> handle(HandlerInput input) {
+    	// String userEmail = input.getServiceClientFactory().getUpsService().getProfileEmail();
         String speechText = "Welcome to Expenditure Manager. How can I help you today ?";
         String repromptText = "Please choose any action like Add Expense, Add Category, Analyze Expense etc, How can I help you ?";
         return input.getResponseBuilder()
