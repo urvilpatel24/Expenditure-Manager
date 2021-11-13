@@ -93,7 +93,8 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        		else if(action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("delete")) {
 	        			speechText = "Please tell me the category name you want to delete.";
 	        		}
-	        		speechText = "Please provide appropriate action for sub-category.";
+	        		else
+	        			speechText = "Please provide appropriate action for sub-category.";
 	        	}
 	        	else if(module.equalsIgnoreCase("expense")) 
 	        	{
@@ -104,15 +105,16 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        			speechText = "Please tell me the date, amount, category, sub-category and account for expense.";
 	        		}
 	        		else if(action.equalsIgnoreCase("edit") || action.equalsIgnoreCase("update") || action.equalsIgnoreCase("change")) {
-	        			speechText = "Sorry, edit not vailable for now.";
+	        			speechText = "Please tell me the category, date and new as well as old amount of expense.";
 	        		}
 	        		else if(action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("delete")) {
-	        			speechText = "Sorry, delete not vailable for now.";
+	        			speechText = "Please tell me the category, date and amount of the expense you want to delete.";
 	        		}
 	        		else if(action.equalsIgnoreCase("analyze")) {
-	        			speechText = "Sorry, analyze not vailable for now.";
+	        			speechText = "Sorry, analyze expense is not vailable for now.";
 	        		}
-	        		speechText = "Please provide appropriate action for expense.";
+	        		else
+	        			speechText = "Please provide appropriate action for expense.";
 	        	}
 	        	else
 	        		speechText = "Please provide appropriate module like account or category or sub-category or expense.";

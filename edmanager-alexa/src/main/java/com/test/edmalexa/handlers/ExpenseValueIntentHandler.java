@@ -73,7 +73,6 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}*/
-	        		speechText = "Please provide appropriate action for sub-category.";
 	        	}
 	        	else
 	        		speechText = "Please provide appropriate module like account or category or sub-category or expense.";

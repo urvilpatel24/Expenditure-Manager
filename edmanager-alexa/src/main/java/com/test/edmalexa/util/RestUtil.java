@@ -10,15 +10,14 @@ import com.google.gson.JsonParser;
 
 public class RestUtil {
 
-	private static final String URL = "http://18.215.161.197:7777/edmapi";
+	private static final String URL = "http://18.215.161.197:80/edmapi";
 	
 	public static JsonObject call(String type, String url) throws Exception 
 	{
-		URL urlForGetRequest = new URL(URL+url);
+		URL urlRequest = new URL(URL+url);
 	    String readLine = null;
-	    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+	    HttpURLConnection conection = (HttpURLConnection) urlRequest.openConnection();
 	    conection.setRequestMethod(type);
-//	    conection.setRequestProperty("userId", "a1bcdef");
 	    
 	    if (conection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 	        BufferedReader in = new BufferedReader(new InputStreamReader(conection.getInputStream()));
@@ -28,7 +27,7 @@ public class RestUtil {
 	        in .close();
 	        System.out.println("Response : " + response.toString());
 	        
-	        return (new JsonParser()).parse(response.toString()).getAsJsonObject();
+	        return ((new JsonParser()).parse(response.toString())).getAsJsonObject();
 	    } 
 	    else
 	        throw new Exception("Exception in rest call");

@@ -1,5 +1,7 @@
 package com.edmanager.controller;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +64,7 @@ public class ExpenseController {
 				expense.setCategory(category);
 				expense.setSubCategory(subCategory);
 				expense.setAmount(amount);
-				expense.setDate(0);
+				expense.setDate((new Date()).getTime());
 				
 				expenseRepository.save(expense);
 				

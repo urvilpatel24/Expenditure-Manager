@@ -57,8 +57,9 @@ public class ModuleValueIntentHandler implements RequestHandler {
 	        	{
 	        		if(currentAction.equalsIgnoreCase("add") || currentAction.equalsIgnoreCase("insert")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/account/add?userId=1&name="+value);
-	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
-	        				speechText = res.get(Constants.MESSAGE).toString();
+	        				speechText = res.toString();
+	        			/*if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
+	        				speechText = res.get(Constants.MESSAGE).toString();*/
 	        		}
 	        		else if(currentAction.equalsIgnoreCase("edit") || currentAction.equalsIgnoreCase("update") || currentAction.equalsIgnoreCase("change")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/account/edit?userId=1&oldName="+value+"&newName="+newValue);
@@ -110,7 +111,8 @@ public class ModuleValueIntentHandler implements RequestHandler {
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		speechText = "Please provide appropriate action for sub-category.";
+	        		else
+	        			speechText = "Please provide appropriate action for sub-category.";
 	        	}
 	        	else
 	        		speechText = "Please provide appropriate module like account or category or sub-category or expense.";
