@@ -48,7 +48,7 @@ public class AccountController {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
 			if(user != null) {
-				account = new Account(name, 0, user); 
+				account = new Account(name, user); 
 				account = accountRepository.save(account);
 				logger.info("New account has been created for user="+user.getName()+", act-name="+account.getName());
 			}
