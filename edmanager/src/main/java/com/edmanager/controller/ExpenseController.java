@@ -47,7 +47,7 @@ public class ExpenseController {
 	
 	@ResponseBody
 	@PostMapping("/add")
-    public Response addExpense(@RequestParam("date") String date, @RequestParam("amount") double amount, @RequestParam("category") String categoryName, 
+    public Response addExpense(@RequestParam("date") long date, @RequestParam("amount") double amount, @RequestParam("category") String categoryName, 
     		@RequestParam("subCategory") String subCategoryName, @RequestParam("account") String accountName, @RequestParam("userId") long userId) {
 		try {
 			Users user = usersRepository.getById(userId);
@@ -55,16 +55,25 @@ public class ExpenseController {
 			Category category = null;
 			SubCategory subCategory = null;
 			Expense expense = new Expense();
-			if(user != null) { 
-				account = accountRepository.findByNameAndUser_Id(accountName, userId);
-				category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
-				subCategory = subCategoryRepository.findByNameAndCategory_IdAndUser_Id(subCategoryName, category.getId(), userId);
+			if(user != null) {
 				
-				expense.setAccountId(account.getId());
+				category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
 				expense.setCategory(category);
-				expense.setSubCategoryId(subCategory.getId());
 				expense.setAmount(amount);
 				expense.setDate((new Date()).getTime());
+				
+				if(!accountName.isEmpty()) {
+					account = accountRepository.findByNameAndUser_Id(accountName, userId);
+					expense.setAccountId(account.getId());
+				}
+				else
+					expense.setAccountId(-1);
+				if(!subCategoryName.isEmpty()) {
+					subCategory = subCategoryRepository.findByNameAndCategory_IdAndUser_Id(subCategoryName, category.getId(), userId);
+					expense.setSubCategoryId(subCategory.getId());
+				}
+				else
+					expense.setSubCategoryId(-1);
 				
 				expenseRepository.save(expense);
 				
@@ -78,4 +87,84 @@ public class ExpenseController {
 		}
     }
 
+	@ResponseBody
+	@PostMapping("/edit")
+    public Response editExpense(@RequestParam("date") long date, @RequestParam("amount") double amount, @RequestParam("category") String categoryName,
+    		@RequestParam("newDate") long newDate, @RequestParam("newAmount") double newAmount, @RequestParam("newCategory") String newCategoryName,
+    		@RequestParam("subCategory") String subCategoryName, @RequestParam("account") String accountName, @RequestParam("userId") long userId) {
+		try {
+			Users user = usersRepository.getById(userId);
+			Account account = null;
+			SubCategory subCategory = null;
+			if(user != null) {
+				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
+				Expense expense = expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId);
+				
+				category = categoryRepository.findByNameAndUser_Id(newCategoryName, userId);
+				expense.setCategory(category);
+				expense.setAmount(newAmount);
+				expense.setDate((new Date()).getTime());
+				
+				if(!accountName.isEmpty()) {
+					account = accountRepository.findByNameAndUser_Id(accountName, userId);
+					expense.setAccountId(account.getId());
+				}
+				else
+					expense.setAccountId(-1);
+				if(!subCategoryName.isEmpty()) {
+					subCategory = subCategoryRepository.findByNameAndCategory_IdAndUser_Id(subCategoryName, category.getId(), userId);
+					expense.setSubCategoryId(subCategory.getId());
+				}
+				else
+					expense.setSubCategoryId(-1);
+				
+				expenseRepository.save(expense);
+				
+				return new Response(Constants.SUCCESS,"Expense has been updated.",null);
+			}
+			else
+				return null;
+		}catch(Exception e) {
+			logger.error("Exception in addExpense API", e);
+			return null;
+		}
+    }
+	
+	@ResponseBody
+	@PostMapping("/delete")
+    public Response deleteExpense(@RequestParam("date") long date, @RequestParam("amount") double amount, 
+    		@RequestParam("category") String categoryName,@RequestParam("userId") long userId) {
+		try {
+			Users user = usersRepository.getById(userId);
+			if(user != null) {
+				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
+				Expense expense = expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId);
+				expenseRepository.delete(expense);
+				return new Response(Constants.SUCCESS,"Expense has been deleted.",null);
+			}
+			else
+				return null;
+		}catch(Exception e) {
+			logger.error("Exception in addExpense API", e);
+			return null;
+		}
+    }
+	
+	@ResponseBody
+	@PostMapping("/find")
+    public Response findExpense(@RequestParam("date") long date, @RequestParam("amount") double amount, 
+    		@RequestParam("category") String categoryName,@RequestParam("userId") long userId) {
+		try {
+			Users user = usersRepository.getById(userId);
+			if(user != null) {
+				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
+				return new Response(Constants.SUCCESS,"Expense found.", expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId));
+			}
+			else
+				return null;
+		}catch(Exception e) {
+			logger.error("Exception in addExpense API", e);
+			return null;
+		}
+    }
 }
