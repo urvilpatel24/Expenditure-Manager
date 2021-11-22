@@ -60,9 +60,9 @@ public class ExpenseController {
 				category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
 				subCategory = subCategoryRepository.findByNameAndCategory_IdAndUser_Id(subCategoryName, category.getId(), userId);
 				
-				expense.setAccount(account);
+				expense.setAccountId(account.getId());
 				expense.setCategory(category);
-				expense.setSubCategory(subCategory);
+				expense.setSubCategoryId(subCategory.getId());
 				expense.setAmount(amount);
 				expense.setDate((new Date()).getTime());
 				

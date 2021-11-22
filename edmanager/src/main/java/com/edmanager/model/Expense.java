@@ -34,14 +34,12 @@ public class Expense {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "expense_category_fk",nullable = false)
     private Category category;
+
+	@Column(name = "sub_category_id")
+    private long subCategoryId;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "expense_sub_category_fk",nullable = false)
-    private SubCategory subCategory;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "expense_account_fk",nullable = false)
-    private Account account;
+	@Column(name = "account_id")
+    private long accountId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "expense_users_fk",nullable = false)
