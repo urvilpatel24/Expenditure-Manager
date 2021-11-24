@@ -158,7 +158,9 @@ public class ExpenseController {
 			Users user = usersRepository.getById(userId);
 			if(user != null) {
 				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
-				return new Response(Constants.SUCCESS,"Expense found.", expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId));
+				Expense expense = expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId);
+				Account account = accountRepository.getById(expense.getAccountId());
+				return new Response(Constants.SUCCESS,"Expense found with Amount "+expense.getAmount()+" CAD, Category "+expense.getCategory()+", Sub category "+expense.getSubCategoryId()+", Account "+account.getName()+". So please provide new details for this expense.", null);
 			}
 			else
 				return null;

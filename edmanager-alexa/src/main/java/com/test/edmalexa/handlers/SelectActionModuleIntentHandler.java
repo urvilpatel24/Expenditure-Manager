@@ -43,54 +43,44 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        	Map<String, Object> map = new HashMap<String, Object>();
     			map.put("CURRENT_MODULE", module);
     			map.put("CURRENT_ACTION", action);
-    			input.getAttributesManager().setSessionAttributes(map);
     			
-	        	if(module.equalsIgnoreCase("account") || module.equalsIgnoreCase("payment method")) 
+	        	if(module.equalsIgnoreCase("account")) 
 	        	{
-	        		if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("insert")) {
-	        			/*JsonObject res = RestUtil.call(Constants.POST, "/account/add?userId=1&name=abcdefg");
-	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
-	        				speechText = res.get(Constants.MESSAGE).toString();*/
+	        		if(action.equalsIgnoreCase("add")) {
 	        			speechText = "Please tell me the name of the account you want to create.";
 	        		}
-	        		else if(action.equalsIgnoreCase("edit") || action.equalsIgnoreCase("update") || action.equalsIgnoreCase("change")) {
+	        		else if(action.equalsIgnoreCase("edit")) {
 	        			speechText = "Please tell me the name of the account followd by the new name.";
 	        		}
-	        		else if(action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("delete")) {
+	        		else if(action.equalsIgnoreCase("delete")) {
 	        			speechText = "Please tell me the name of the account you want to delete.";
 	        		}
 	        		else
 	        			speechText = "Please provide appropriate action for account.";
 	        	}
-	        	else if(module.equalsIgnoreCase("category") || module.equalsIgnoreCase("primary category")) 
+	        	else if(module.equalsIgnoreCase("category")) 
 	        	{
-	        		if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("insert")) {
-	        			/*JsonObject res = RestUtil.call(Constants.POST, "/account/add?userId=1&name=abcdefg");
-	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
-	        				speechText = res.get(Constants.MESSAGE).toString();*/
+	        		if(action.equalsIgnoreCase("add")) {
 	        			speechText = "Please tell me the category name you want to create.";
 	        		}
-	        		else if(action.equalsIgnoreCase("edit") || action.equalsIgnoreCase("update") || action.equalsIgnoreCase("change")) {
+	        		else if(action.equalsIgnoreCase("edit")) {
 	        			speechText = "Please tell me the category name followed by the new name.";
 	        		}
-	        		else if(action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("delete")) {
+	        		else if(action.equalsIgnoreCase("delete")) {
 	        			speechText = "Please tell me the category name you want to delete.";
 	        		}
 	        		else
 	        			speechText = "Please provide appropriate action for category.";
 	        	}
-	        	else if(module.equalsIgnoreCase("sub-category") || module.equalsIgnoreCase("sub category") || module.equalsIgnoreCase("subcategory")) 
+	        	else if(module.equalsIgnoreCase("subcategory")) 
 	        	{
-	        		if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("insert")) {
-	        			/*JsonObject res = RestUtil.call(Constants.POST, "/account/add?userId=1&name=abcdefg");
-	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
-	        				speechText = res.get(Constants.MESSAGE).toString();*/
+	        		if(action.equalsIgnoreCase("add")) {
 	        			speechText = "Please tell me the category name you want to create.";
 	        		}
-	        		else if(action.equalsIgnoreCase("edit") || action.equalsIgnoreCase("update") || action.equalsIgnoreCase("change")) {
+	        		else if(action.equalsIgnoreCase("edit")) {
 	        			speechText = "Please tell me the category name followd by the new name.";
 	        		}
-	        		else if(action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("delete")) {
+	        		else if(action.equalsIgnoreCase("delete")) {
 	        			speechText = "Please tell me the category name you want to delete.";
 	        		}
 	        		else
@@ -98,29 +88,28 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        	}
 	        	else if(module.equalsIgnoreCase("expense")) 
 	        	{
-	        		if(action.equalsIgnoreCase("add") || action.equalsIgnoreCase("insert")) {
-	        			/*JsonObject res = RestUtil.call(Constants.POST, "/account/add?userId=1&name=abcdefg");
-	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
-	        				speechText = res.get(Constants.MESSAGE).toString();*/
+	        		if(action.equalsIgnoreCase("add")) {
 	        			speechText = "Please tell me the date, amount, category, sub-category and account for expense.";
 	        		}
-	        		else if(action.equalsIgnoreCase("edit") || action.equalsIgnoreCase("update") || action.equalsIgnoreCase("change")) {
-	        			speechText = "Please tell me the category, date and new as well as old amount of expense.";
+	        		else if(action.equalsIgnoreCase("edit")) {
+	        			map.put("CURRENT_SUB_ACTION", "find");
+	        			speechText = "Please tell me the category, date and amount of expense so that I can find the expense that you want to update.";
 	        		}
-	        		else if(action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("delete")) {
-	        			speechText = "Please tell me the category, date and amount of the expense you want to delete.";
-	        		}
-	        		else if(action.equalsIgnoreCase("analyze")) {
-	        			speechText = "Sorry, analyze expense is not vailable for now.";
+	        		else if(action.equalsIgnoreCase("delete")) {
+	        			speechText = "Please tell me the category, date and amount of expense so that I can find and delete that expense for you.";
 	        		}
 	        		else
 	        			speechText = "Please provide appropriate action for expense.";
 	        	}
+	        	else if(module.equalsIgnoreCase("analyze")) {
+	        		
+	        	}
 	        	else
 	        		speechText = "Please provide appropriate module like account or category or sub-category or expense.";
+	        	
+	        	input.getAttributesManager().setSessionAttributes(map);
 	        }
 	        return input.getResponseBuilder()
-	                .withSimpleCard("Expenditure Manager", speechText)
 	                .withSpeech(speechText)
 	                .withReprompt(Constants.REPROMPT)
 	                .withShouldEndSession(false)
@@ -128,7 +117,6 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 		}
 		catch(Exception e) {
 			return input.getResponseBuilder()
-	                .withSimpleCard("Expenditure Manager", Constants.ERR_MSG)
 	                .withSpeech(Constants.ERR_MSG)
 	                .withReprompt(Constants.ERR_MSG)
 	                .withShouldEndSession(false)

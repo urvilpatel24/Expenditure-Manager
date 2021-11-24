@@ -30,7 +30,7 @@ public class ModuleValueIntentHandler implements RequestHandler {
 	        IntentRequest intentRequest = (IntentRequest) request;
 	        Intent intent = intentRequest.getIntent();
 	        Map<String, Slot> slots = intent.getSlots();
-	
+	        
 	        Slot moduleSlot = slots.get("module");
 	        Slot valueSlot = slots.get("value");
 	        Slot newValueSlot = slots.get("newValue");
@@ -53,20 +53,19 @@ public class ModuleValueIntentHandler implements RequestHandler {
     			String currentModule = String.valueOf(map.get("CURRENT_MODULE"));
     			String currentAction =String.valueOf(map.get("CURRENT_ACTION"));
     			
-	        	if(currentModule.equalsIgnoreCase(module) && (currentModule.equalsIgnoreCase("account") || currentModule.equalsIgnoreCase("payment method"))) 
+	        	if(currentModule.equalsIgnoreCase(module) && currentModule.equalsIgnoreCase("account"))
 	        	{
-	        		if(currentAction.equalsIgnoreCase("add") || currentAction.equalsIgnoreCase("insert")) {
+	        		if(currentAction.equalsIgnoreCase("add")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/account/add?userId=1&name="+value);
-	        				speechText = res.toString();
-	        			/*if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
-	        				speechText = res.get(Constants.MESSAGE).toString();*/
+	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
+	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("edit") || currentAction.equalsIgnoreCase("update") || currentAction.equalsIgnoreCase("change")) {
+	        		else if(currentAction.equalsIgnoreCase("edit")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/account/edit?userId=1&oldName="+value+"&newName="+newValue);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("remove") || currentAction.equalsIgnoreCase("delete")) {
+	        		else if(currentAction.equalsIgnoreCase("delete")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/account/delete?userId=1&name="+value);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
@@ -74,19 +73,19 @@ public class ModuleValueIntentHandler implements RequestHandler {
 	        		else
 	        			speechText = "Please provide appropriate action for account.";
 	        	}
-	        	else if(currentModule.equalsIgnoreCase(module) && (currentModule.equalsIgnoreCase("category") || currentModule.equalsIgnoreCase("primary category"))) 
+	        	else if(currentModule.equalsIgnoreCase(module) && currentModule.equalsIgnoreCase("category")) 
 	        	{
-	        		if(currentAction.equalsIgnoreCase("add") || currentAction.equalsIgnoreCase("insert")) {
+	        		if(currentAction.equalsIgnoreCase("add")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/category/add?userId=1&name="+value);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("edit") || currentAction.equalsIgnoreCase("update") || currentAction.equalsIgnoreCase("change")) {
+	        		else if(currentAction.equalsIgnoreCase("edit")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/category/edit?userId=1&oldName="+value+"&newName="+newValue);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("remove") || currentAction.equalsIgnoreCase("delete")) {
+	        		else if(currentAction.equalsIgnoreCase("delete")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/category/delete?userId=1&name="+value);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
@@ -94,19 +93,19 @@ public class ModuleValueIntentHandler implements RequestHandler {
 	        		else
 	        			speechText = "Please provide appropriate action for category.";
 	        	}
-	        	else if(currentModule.equalsIgnoreCase(module) && (currentModule.equalsIgnoreCase("sub-category") || currentModule.equalsIgnoreCase("sub category") || currentModule.equalsIgnoreCase("subcategory"))) 
+	        	else if(currentModule.equalsIgnoreCase(module) && currentModule.equalsIgnoreCase("subcategory")) 
 	        	{
-	        		if(currentAction.equalsIgnoreCase("add") || currentAction.equalsIgnoreCase("insert")) {
+	        		if(currentAction.equalsIgnoreCase("add")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/subCategory/add?userId=1&name="+value+"&parentName="+parentCategory);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("edit") || currentAction.equalsIgnoreCase("update") || currentAction.equalsIgnoreCase("change")) {
+	        		else if(currentAction.equalsIgnoreCase("edit")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/subCategory/edit?userId=1&oldName="+value+"&newName="+newValue+"&parentName="+parentCategory);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("remove") || currentAction.equalsIgnoreCase("delete")) {
+	        		else if(currentAction.equalsIgnoreCase("delete")) {
 	        			JsonObject res = RestUtil.call(Constants.POST, "/subCategory/delete?userId=1&name="+value+"&parentName="+parentCategory);
 	        			if(res.get(Constants.STATUS).toString().equalsIgnoreCase(Constants.SUCCESS))
 	        				speechText = res.get(Constants.MESSAGE).toString();
@@ -118,7 +117,6 @@ public class ModuleValueIntentHandler implements RequestHandler {
 	        		speechText = "Please provide appropriate module like account or category or sub-category or expense.";
 	        }
 	        return input.getResponseBuilder()
-	                .withSimpleCard("Expenditure Manager", speechText)
 	                .withSpeech(speechText)
 	                .withReprompt(Constants.REPROMPT)
 	                .withShouldEndSession(false)
@@ -126,7 +124,6 @@ public class ModuleValueIntentHandler implements RequestHandler {
 		}
 		catch(Exception e) {
 			return input.getResponseBuilder()
-	                .withSimpleCard("Expenditure Manager", Constants.ERR_MSG)
 	                .withSpeech(Constants.ERR_MSG)
 	                .withReprompt(Constants.ERR_MSG)
 	                .withShouldEndSession(false)
