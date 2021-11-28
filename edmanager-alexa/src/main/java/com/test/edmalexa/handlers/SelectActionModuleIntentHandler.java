@@ -25,24 +25,34 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	{
 		try 
 		{
+			System.out.println("Inside SelectActionModuleIntent ...");
+			
 			Request request = input.getRequestEnvelope().getRequest();
 	        IntentRequest intentRequest = (IntentRequest) request;
 	        Intent intent = intentRequest.getIntent();
 	        Map<String, Slot> slots = intent.getSlots();
 	
+	        System.out.println("Inside SelectActionModuleIntent 1...");
+	        
 	        Slot actionSlot = slots.get("action");
 	        Slot moduleSlot = slots.get("module");
 	        String speechText = "";
 	
+	        System.out.println("Inside SelectActionModuleIntent 2...");
+	        
 	        if(moduleSlot != null && moduleSlot.getResolutions() != null && moduleSlot.getResolutions().toString().contains("ER_SUCCESS_MATCH") 
 	        		&& actionSlot != null && actionSlot.getResolutions() != null && actionSlot.getResolutions().toString().contains("ER_SUCCESS_MATCH"))
 	        {
+	        	System.out.println("Inside If...");
+	        	
 	        	String module = moduleSlot.getValue();
 	        	String action = actionSlot.getValue();
 	        	
 	        	Map<String, Object> map = new HashMap<String, Object>();
     			map.put("CURRENT_MODULE", module);
     			map.put("CURRENT_ACTION", action);
+    			
+    			System.out.println("module = "+module+", action="+action);
     			
 	        	if(module.equalsIgnoreCase("account")) 
 	        	{
@@ -98,17 +108,18 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        		else if(action.equalsIgnoreCase("delete")) {
 	        			speechText = "Please tell me the category, date and amount of expense so that I can find and delete that expense for you.";
 	        		}
+	        		else if(action.equalsIgnoreCase("analyze")) {
+	        			speechText = "Please tell me the category and time period for which you want to analyse your expenses.";
+		        	}
 	        		else
 	        			speechText = "Please provide appropriate action for expense.";
-	        	}
-	        	else if(module.equalsIgnoreCase("analyze")) {
-	        		
 	        	}
 	        	else
 	        		speechText = "Please provide appropriate module like account or category or sub-category or expense.";
 	        	
 	        	input.getAttributesManager().setSessionAttributes(map);
 	        }
+	        System.out.println("Sending response to alexa : "+speechText);
 	        return input.getResponseBuilder()
 	                .withSpeech(speechText)
 	                .withReprompt(Constants.REPROMPT)
@@ -116,6 +127,8 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	                .build();
 		}
 		catch(Exception e) {
+			System.out.println("Exception : "+e.getMessage());
+			e.printStackTrace();
 			return input.getResponseBuilder()
 	                .withSpeech(Constants.ERR_MSG)
 	                .withReprompt(Constants.ERR_MSG)
