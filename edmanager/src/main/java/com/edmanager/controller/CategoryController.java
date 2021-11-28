@@ -42,12 +42,12 @@ public class CategoryController {
 			return new Response(Constants.SUCCESS,"",categoryRepository.findAllByUser_Id(userId));
 		}catch(Exception e) {
 			logger.error("Exception in getAll API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in fetching categories.",null);
 		}
     }
 	
 	@ResponseBody
-	@GetMapping("/add")
+	@PostMapping("/add")
     public Response addCategory(@RequestParam("name") String name, @RequestParam("userId") long userId){
 		try {
 			Users user = usersRepository.getById(userId);
@@ -66,10 +66,12 @@ public class CategoryController {
 				subCategory.setUser(user);
 				subCategoryRepository.save(subCategory);
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,category.getName()+" has been added.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addCategory API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in adding category.",null);
 		}
     }
 	
@@ -85,10 +87,12 @@ public class CategoryController {
 				category = categoryRepository.save(category);
 				logger.info("Category has been edited for user="+user.getName()+",category-name="+category.getName());
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,"Category name has been changed to "+category.getName(),null);
 		}catch(Exception e) {
 			logger.error("Exception in editCategory API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in updating category.",null);
 		}
     }
 
@@ -103,10 +107,12 @@ public class CategoryController {
 				categoryRepository.delete(category);
 				logger.info("Category has been deleted for user="+user.getName()+", act-name="+name);
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,category.getName()+" has been deleted.",null);
 		}catch(Exception e) {
 			logger.error("Exception in deleteCategory API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in deleting category.",null);
 		}
     }
 }

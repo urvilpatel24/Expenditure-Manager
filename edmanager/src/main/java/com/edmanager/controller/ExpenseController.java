@@ -80,10 +80,10 @@ public class ExpenseController {
 				return new Response(Constants.SUCCESS,"Expense has been added.",null);
 			}
 			else
-				return null;
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addExpense API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in adding the expense.",null);
 		}
     }
 
@@ -123,10 +123,10 @@ public class ExpenseController {
 				return new Response(Constants.SUCCESS,"Expense has been updated.",null);
 			}
 			else
-				return null;
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addExpense API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in updating the expense.",null);
 		}
     }
 	
@@ -143,10 +143,10 @@ public class ExpenseController {
 				return new Response(Constants.SUCCESS,"Expense has been deleted.",null);
 			}
 			else
-				return null;
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addExpense API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in deleting the expense.",null);
 		}
     }
 	
@@ -163,10 +163,10 @@ public class ExpenseController {
 				return new Response(Constants.SUCCESS,"Expense found with Amount "+expense.getAmount()+" CAD, Category "+expense.getCategory()+", Sub category "+expense.getSubCategoryId()+", Account "+account.getName()+". So please provide new details for this expense.", null);
 			}
 			else
-				return null;
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addExpense API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in finding the expense.",null);
 		}
     }
 }

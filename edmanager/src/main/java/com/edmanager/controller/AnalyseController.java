@@ -28,14 +28,28 @@ public class AnalyseController {
     private CategoryRepository categoryRepository;
 	
 	@ResponseBody
+	@GetMapping("/byCategoryAndDate")
+    public Response byCategoryAndDate(@RequestParam("category") String category, @RequestParam("startDate") long startDate, 
+    		@RequestParam("endDate") long endDate, @RequestParam("userId") long userId){
+		try {
+			logger.info("analyse expenses by Category and date : "+category+" : "+startDate+" : "+endDate);
+			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
+			return new Response(Constants.SUCCESS,Constants.SUCCESS,expenseRepository.findAllByDatesAndCategoryAndUser_Id(startDate, endDate, cat.getId(), userId));
+		}catch(Exception e) {
+			logger.error("Exception in byCategoryAndDate API", e);
+			return new Response(Constants.EXCEPTION,"There is a problem in fetching the results.",null);
+		}
+    }
+	
+	@ResponseBody
 	@GetMapping("/byCategory")
     public Response byCategory(@RequestParam("category") String category, @RequestParam("userId") long userId){
 		try {
 			logger.info("analyse expenses by Category : ",category);
 			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
-			return new Response(Constants.SUCCESS,"",expenseRepository.findAllByCategory_idAndUser_Id(cat.getId(), userId));
+			return new Response(Constants.SUCCESS,Constants.SUCCESS,expenseRepository.findAllByCategory_idAndUser_Id(cat.getId(), userId));
 		}catch(Exception e) {
-			logger.error("Exception in getAll API", e);
+			logger.error("Exception in byCategory API", e);
 			return null;
 		}
     }
@@ -45,11 +59,10 @@ public class AnalyseController {
     public Response byDate(@RequestParam("startDate") long startDate, @RequestParam("endDate") long endDate, @RequestParam("userId") long userId) {
 		try {
 			logger.info("analyse expenses by date : ",startDate+" : "+endDate);
-			return new Response(Constants.SUCCESS,"",expenseRepository.findAllByDatesAndUser_Id(startDate, endDate, userId));
+			return new Response(Constants.SUCCESS,Constants.SUCCESS,expenseRepository.findAllByDatesAndUser_Id(startDate, endDate, userId));
 		}catch(Exception e) {
-			logger.error("Exception in getAll API", e);
+			logger.error("Exception in byDate API", e);
 			return null;
 		}
     }
-	
 }

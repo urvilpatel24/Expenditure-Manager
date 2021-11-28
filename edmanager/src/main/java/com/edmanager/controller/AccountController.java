@@ -37,7 +37,7 @@ public class AccountController {
 			return new Response(Constants.SUCCESS,"",accountRepository.findAllByUser_id(userId));
 		}catch(Exception e) {
 			logger.error("Exception in getAll API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in fetching accounts.",null);
 		}
     }
 	
@@ -52,10 +52,12 @@ public class AccountController {
 				account = accountRepository.save(account);
 				logger.info("New account has been created for user="+user.getName()+", act-name="+account.getName());
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,account.getName()+" has been added.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addAccount API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in adding account.",null);
 		}
     }
 	
@@ -71,10 +73,12 @@ public class AccountController {
 				account = accountRepository.save(account);
 				logger.info("Account has been edited for user="+user.getName()+", act-name="+account.getName());
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,"Account name has been changed to "+account.getName(),null);
 		}catch(Exception e) {
 			logger.error("Exception in editAccount API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in updating account.",null);
 		}
     }
 	
@@ -89,10 +93,12 @@ public class AccountController {
 				accountRepository.delete(account);
 				logger.info("Account has been deleted for user="+user.getName()+", act-name="+name);
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,account.getName()+" has been deleted.",null);
 		}catch(Exception e) {
 			logger.error("Exception in deleteAccount API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in deleting account.",null);
 		}
     }
 }
