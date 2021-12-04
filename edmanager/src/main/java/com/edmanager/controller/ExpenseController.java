@@ -1,7 +1,5 @@
 package com.edmanager.controller;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class ExpenseController {
 				category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
 				expense.setCategory(category);
 				expense.setAmount(amount);
-				expense.setDate((new Date()).getTime());
+				expense.setDate(date);
 				
 				if(!accountName.isEmpty()) {
 					account = accountRepository.findByNameAndUser_Id(accountName, userId);
@@ -103,7 +101,7 @@ public class ExpenseController {
 				category = categoryRepository.findByNameAndUser_Id(newCategoryName, userId);
 				expense.setCategory(category);
 				expense.setAmount(newAmount);
-				expense.setDate((new Date()).getTime());
+				expense.setDate(date);
 				
 				if(!accountName.isEmpty()) {
 					account = accountRepository.findByNameAndUser_Id(accountName, userId);
@@ -184,7 +182,7 @@ public class ExpenseController {
 				category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
 				expense.setCategory(category);
 				expense.setAmount(amount);
-				expense.setDate((new Date()).getTime());
+				expense.setDate(date);
 				
 				if(!accountName.isEmpty()) {
 					account = accountRepository.findByNameAndUser_Id(accountName, userId);
