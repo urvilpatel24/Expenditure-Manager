@@ -35,19 +35,19 @@ public class AnalyseController {
 	
 	@ResponseBody
 	@GetMapping("/byCategoryAndDate")
-    public Response byCategoryAndDate(@RequestParam("category") String category, @RequestParam("startDate") long startDate, 
+    public Response byCategoryAndDate(@RequestParam("startDate") long startDate, 
     		@RequestParam("endDate") long endDate, @RequestParam("userId") long userId){
 		try {
-			logger.info("analyse expenses by Category and date : "+category+" : "+startDate+" : "+endDate);
-			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
+			logger.info("analyse expenses by Category and date : : "+startDate+" : "+endDate);
+			Category cat = categoryRepository.findByNameAndUser_Id("household", userId);
 			List<Expense> list = expenseRepository.findAllByDatesAndCategory_IdAndUser_Id(startDate, endDate, cat.getId(), userId);
 			String res = "You have "+list.size()+" expenses for category "+cat.getName()+". ";
 			double amt = 0;
 			for(Expense e: list) {
-				res.concat("You spent "+e.getAmount()+"  CAD in "+e.getCategory().getName()+" on "+formatDate(e.getDate())+" .");
+				res = res.concat("You spent "+e.getAmount()+"  CAD in "+e.getCategory().getName()+" on "+formatDate(e.getDate())+" .");
 				amt += e.getAmount();
 			}
-			res.concat("In total you spent "+amt+" CAD.");
+			res = res.concat("In total you spent "+amt+" CAD.");
 			return new Response(Constants.SUCCESS,res,null);
 		}catch(Exception e) {
 			logger.error("Exception in byCategoryAndDate API", e);
@@ -60,7 +60,15 @@ public class AnalyseController {
     public Response email(@RequestParam("startDate") long startDate, @RequestParam("endDate") long endDate, @RequestParam("userId") long userId){
 		try {
 			logger.info("email analyse expenses : "+startDate+" : "+endDate);
-			MailUtil.send(Constants.EMAIL, "Expenditure Manager - Expense report", "", "Expenditure Manager");
+			List<Expense> list = expenseRepository.findAllByDatesAndUser_Id(startDate, endDate, userId);
+			String res = "You have "+list.size()+" expenses for November 2021. \n\n";
+			double amt = 0;
+			for(Expense e: list) {
+				res.concat("You spent "+e.getAmount()+"  CAD in "+e.getCategory().getName()+" on "+formatDate(e.getDate())+" .\n");
+				amt += e.getAmount();
+			}
+			res.concat("\n\nIn total you spent "+amt+" CAD.\n");
+			MailUtil.send(Constants.EMAIL, "Expenditure Manager - Expense report", res, "Expenditure Manager");
 			return new Response(Constants.SUCCESS,"I have sent an analysis report on your registerd Email.",null);
 		}catch(Exception e) {
 			logger.error("Exception in byCategoryAndDate API", e);

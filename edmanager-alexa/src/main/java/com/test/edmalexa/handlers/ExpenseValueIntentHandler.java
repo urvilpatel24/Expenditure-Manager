@@ -120,7 +120,7 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        			map.put("AMOUNT", amount);
 	        			map.put("CATEGORY", category);
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("edit") && ( currentSubAction == null || currentSubAction.isEmpty()) ) {
+	        		else if(currentAction.equalsIgnoreCase("edit")) {
 	        			System.out.println("Inside expense edit edit...");
 	        			JsonObject res = RestUtil.call(Constants.POST, "/expense/edit?userId=1&date="+String.valueOf(map.get("DATE"))+"&amount="+String.valueOf(map.get("AMOUNT"))+"&category="+String.valueOf(map.get("CATEGORY"))+
 	        					"&newDate="+date+"&newAmount="+amount+"&newCategory="+category+"&subCategory="+subCategory+"&account="+account);
@@ -147,19 +147,19 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        			map.put("CURRENT_MODULE", "");
 	        			map.put("CURRENT_ACTION", "");
 	        		}
-	        		else if(currentAction.equalsIgnoreCase("analyse")) {
+	        		else if(currentAction.equalsIgnoreCase("analyze")) {
 	        			System.out.println("Inside expense analyse ...");
 	        			long s = 0L;
 	        			long e = 0L;
-	        			if(ds.equals("2021-11-30")) {
-	        				s = fmtDate(ds);
-	        				e = formatDate(ds);
+	        			if(ds.equals("2021-11")) {
+	        				s = formatDate("2021-11-01");
+	        				e = formatDate("2021-11-30");
 	        			}
-	        			else {
-	        				s = formatDate(ds);
-	        				e = fmtDate(ds);
+	        			else if (ds.equals("2021-W48")){
+	        				s = formatDate("2021-11-29");
+	        				e = formatDate("2021-12-05");
 	        			}
-	        			JsonObject res = RestUtil.call(Constants.GET, "/analyse/byCategoryAndDate?userId=1&startDate="+s+"&endDate="+e+"&category="+category);
+	        			JsonObject res = RestUtil.call(Constants.GET, "/analyse/byCategoryAndDate?userId=1&startDate="+s+"&endDate="+e);
 	        			if(res.get(Constants.STATUS).toString() != null && !res.get(Constants.STATUS).toString().isEmpty())
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        			else
@@ -172,13 +172,13 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        			System.out.println("Inside email analyse ...");
 	        			long s = 0L;
 	        			long e = 0L;
-	        			if(ds.equals("2021-11-30")) {
-	        				s = fmtDate(ds);
-	        				e = formatDate(ds);
+	        			if(ds.equals("2021-11")) {
+	        				s = formatDate("2021-11-01");
+	        				e = formatDate("2021-11-30");
 	        			}
-	        			else {
-	        				s = formatDate(ds);
-	        				e = fmtDate(ds);
+	        			else if (ds.equals("2021-W48")){
+	        				s = formatDate("2021-11-29");
+	        				e = formatDate("2021-12-05");
 	        			}
 	        			JsonObject res = RestUtil.call(Constants.GET, "/analyse/email?userId=1&startDate="+s+"&endDate="+e);
 	        			if(res.get(Constants.STATUS).toString() != null && !res.get(Constants.STATUS).toString().isEmpty())
@@ -243,7 +243,7 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 		}
 	}
 	
-	private long fmtDate(String date) throws Exception {
+	/*private long fmtDate(String date) throws Exception {
 		try {
 			if(date.equals("2021-11-29"))
 				return formatDate("2021-12-05");
@@ -251,10 +251,12 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 				return formatDate("2021-11-28");
 			else if(date.equals("2021-11-30"))
 				return formatDate("2021-11-01");
+			else if(date.equals("2021-W48"))
+				
 			else return formatDate(date);
 		}
 		catch(Exception e) {
 			return 0L;
 		}
-	}
+	}*/
 }

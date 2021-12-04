@@ -115,7 +115,7 @@ public class ExpenseController {
 				}
 				else
 					expense.setSubCategoryId(-1);
-				
+				expense.setUser(user);
 				expenseRepository.save(expense);
 				
 				return new Response(Constants.SUCCESS,"Expense has been updated.",null);
@@ -158,12 +158,12 @@ public class ExpenseController {
 				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
 				Expense expense = expenseRepository.findByAmountAndDateAndCategory_IdAndUser_Id(amount, date, category.getId(), userId);
 				Account account = accountRepository.getById(expense.getAccountId());
-				return new Response(Constants.SUCCESS,"Expense found with Amount "+expense.getAmount()+" CAD, Category "+expense.getCategory()+", Sub category "+expense.getSubCategoryId()+", Account "+account.getName()+". So please provide new details for this expense.", null);
+				return new Response(Constants.SUCCESS,"Expense found with Amount "+expense.getAmount()+" CAD, Category "+expense.getCategory().getName()+", Account "+account.getName()+". So please provide new details for this expense.", null);
 			}
 			else
 				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 		}catch(Exception e) {
-			logger.error("Exception in addExpense API", e);
+			logger.error("Exception in findExpense API", e);
 			return new Response(Constants.EXCEPTION,"There is a problem in finding the expense.",null);
 		}
     }
@@ -192,6 +192,7 @@ public class ExpenseController {
 					expense.setAccountId(-1);
 					
 				expense.setSubCategoryId(subCategoryRepository.findByNameAndCategory_IdAndUser_Id("Other", category.getId(), userId).getId());
+				expense.setUser(user);
 				expenseRepository.save(expense);
 				
 				return new Response(Constants.SUCCESS,"Expense has been added and your "+nop+" friends have to pay you"+(expense.getAmount()/(nop+1)+" dollars."),null);
