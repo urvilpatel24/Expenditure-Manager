@@ -112,7 +112,7 @@ public class CategoryController {
 			return new Response(Constants.SUCCESS,category.getName()+" has been deleted.",null);
 		}catch(Exception e) {
 			logger.error("Exception in deleteCategory API", e);
-			return new Response(Constants.EXCEPTION,"There is a problem in deleting category.",null);
+			return new Response(Constants.EXCEPTION,"You have added subcategories under this category, so first you have to delete those subcategories.",null);
 		}
     }
 }
