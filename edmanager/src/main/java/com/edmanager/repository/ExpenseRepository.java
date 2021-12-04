@@ -20,7 +20,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 	public List<Expense> findAllByDatesAndUser_Id(long startDate, long endDate, long userId);
 	
 	@Query("select e from Expense e where e.date between ?1 and ?2 and e.category.id = ?3 and e.user.id = ?4 order by e.date")
-	public List<Expense> findAllByDatesAndCategoryAndUser_Id(long startDate, long endDate, long categoryId, long userId);
+	public List<Expense> findAllByDatesAndCategory_IdAndUser_Id(long startDate, long endDate, long categoryId, long userId);
 	
-	public Expense findByAmountAndDateCategory_idAndUser_Id(double amount, long date, long categoryId, long userId);
+	public Expense findByAmountAndDateAndCategory_IdAndUser_Id(double amount, long date, long categoryId, long userId);
 }

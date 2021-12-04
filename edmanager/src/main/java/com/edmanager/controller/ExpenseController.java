@@ -98,7 +98,7 @@ public class ExpenseController {
 			SubCategory subCategory = null;
 			if(user != null) {
 				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
-				Expense expense = expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId);
+				Expense expense = expenseRepository.findByAmountAndDateAndCategory_IdAndUser_Id(amount, date, category.getId(), userId);
 				
 				category = categoryRepository.findByNameAndUser_Id(newCategoryName, userId);
 				expense.setCategory(category);
@@ -138,7 +138,7 @@ public class ExpenseController {
 			Users user = usersRepository.getById(userId);
 			if(user != null) {
 				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
-				Expense expense = expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId);
+				Expense expense = expenseRepository.findByAmountAndDateAndCategory_IdAndUser_Id(amount, date, category.getId(), userId);
 				expenseRepository.delete(expense);
 				return new Response(Constants.SUCCESS,"Expense has been deleted.",null);
 			}
@@ -158,7 +158,7 @@ public class ExpenseController {
 			Users user = usersRepository.getById(userId);
 			if(user != null) {
 				Category category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
-				Expense expense = expenseRepository.findByAmountAndDateCategory_idAndUser_Id(amount, date, category.getId(), userId);
+				Expense expense = expenseRepository.findByAmountAndDateAndCategory_IdAndUser_Id(amount, date, category.getId(), userId);
 				Account account = accountRepository.getById(expense.getAccountId());
 				return new Response(Constants.SUCCESS,"Expense found with Amount "+expense.getAmount()+" CAD, Category "+expense.getCategory()+", Sub category "+expense.getSubCategoryId()+", Account "+account.getName()+". So please provide new details for this expense.", null);
 			}
@@ -178,7 +178,6 @@ public class ExpenseController {
 			Users user = usersRepository.getById(userId);
 			Account account = null;
 			Category category = null;
-			SubCategory subCategory = null;
 			Expense expense = new Expense();
 			if(user != null) {
 				

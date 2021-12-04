@@ -40,7 +40,7 @@ public class AnalyseController {
 		try {
 			logger.info("analyse expenses by Category and date : "+category+" : "+startDate+" : "+endDate);
 			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
-			List<Expense> list = expenseRepository.findAllByDatesAndCategoryAndUser_Id(startDate, endDate, cat.getId(), userId);
+			List<Expense> list = expenseRepository.findAllByDatesAndCategory_IdAndUser_Id(startDate, endDate, cat.getId(), userId);
 			String res = "You have "+list.size()+" expenses for category "+cat.getName()+". ";
 			double amt = 0;
 			for(Expense e: list) {
