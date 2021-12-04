@@ -189,6 +189,19 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        			map.put("CURRENT_MODULE", "");
 	        			map.put("CURRENT_ACTION", "");
 	        		}
+	        		else if(currentAction.equalsIgnoreCase("split")) {
+	        			System.out.println("Inside split expense add ...");
+	        			String nop = slots.get("nop").getValue();
+	        			System.out.println("nop="+nop);
+	        			JsonObject res = RestUtil.call(Constants.POST, "/expense/split?userId=1&date="+date+"&subCategory="+subCategory+"&category="+category+"&amount="+amount+"&account="+account+"&nop="+nop);
+	        			if(res.get(Constants.STATUS).toString() != null && !res.get(Constants.STATUS).toString().isEmpty())
+	        				speechText = res.get(Constants.MESSAGE).toString();
+	        			else
+	        				speechText = Constants.ERR_MSG_SERVER;
+	        			
+	        			map.put("CURRENT_MODULE", "");
+	        			map.put("CURRENT_ACTION", "");
+	        		}
 	        	}
 	        	else
 	        		speechText = "Please provide appropriate module like account or category or expense.";

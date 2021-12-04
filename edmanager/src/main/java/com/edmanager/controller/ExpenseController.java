@@ -169,4 +169,42 @@ public class ExpenseController {
 			return new Response(Constants.EXCEPTION,"There is a problem in finding the expense.",null);
 		}
     }
+	
+	@ResponseBody
+	@PostMapping("/split")
+    public Response splitExpense(@RequestParam("date") long date, @RequestParam("amount") double amount, @RequestParam("category") String categoryName, 
+    			@RequestParam("account") String accountName, @RequestParam("nop") int nop, @RequestParam("userId") long userId) {
+		try {
+			Users user = usersRepository.getById(userId);
+			Account account = null;
+			Category category = null;
+			SubCategory subCategory = null;
+			Expense expense = new Expense();
+			if(user != null) {
+				
+				category = categoryRepository.findByNameAndUser_Id(categoryName, userId);
+				expense.setCategory(category);
+				expense.setAmount(amount);
+				expense.setDate((new Date()).getTime());
+				
+				if(!accountName.isEmpty()) {
+					account = accountRepository.findByNameAndUser_Id(accountName, userId);
+					expense.setAccountId(account.getId());
+				}
+				else
+					expense.setAccountId(-1);
+					
+				expense.setSubCategoryId(subCategoryRepository.findByNameAndCategory_IdAndUser_Id("Other", category.getId(), userId).getId());
+				expenseRepository.save(expense);
+				
+				return new Response(Constants.SUCCESS,"Expense has been added and your "+nop+" friends have to pay you"+(expense.getAmount()/(nop+1)+" dollars."),null);
+			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
+		}catch(Exception e) {
+			logger.error("Exception in addExpense API", e);
+			return new Response(Constants.EXCEPTION,"There is a problem in adding the expense.",null);
+		}
+    }
+
 }

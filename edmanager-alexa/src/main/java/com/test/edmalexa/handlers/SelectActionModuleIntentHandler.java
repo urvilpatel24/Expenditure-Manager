@@ -114,6 +114,9 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        		else if (action.equalsIgnoreCase("email")) {
 	        			speechText = "Please tell me the time period for which you want the report of your expenses.";
 	        		}
+	        		else if (action.equalsIgnoreCase("split")) {
+	        			speechText = "Please tell me the date, amount, category, account and no of persons included in expense.";
+	        		}
 	        		else
 	        			speechText = "Please provide appropriate action for expense.";
 	        	}
