@@ -11,7 +11,7 @@ import com.google.gson.JsonParser;
 
 public class RestUtil {
 
-	private static final String URL = "http://172.31.21.155:80/edmapi";
+	private static final String URL = "http://3.91.248.38:80/edmapi";
 	
 	public static JsonObject call(String type, String url) throws Exception 
 	{
