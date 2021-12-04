@@ -85,13 +85,13 @@ public class SelectActionModuleIntentHandler implements RequestHandler {
 	        	else if(module.equalsIgnoreCase("subcategory")) 
 	        	{
 	        		if(action.equalsIgnoreCase("add")) {
-	        			speechText = "Please tell me the subcategory name you want to create.";
+	        			speechText = "Please tell me the subcategory name you want to create along with parent category name.";
 	        		}
 	        		else if(action.equalsIgnoreCase("edit")) {
-	        			speechText = "Please tell me the subcategory name followd by the new name.";
+	        			speechText = "Please tell me the subcategory name followd by the new name along with parent category name.";
 	        		}
 	        		else if(action.equalsIgnoreCase("delete")) {
-	        			speechText = "Please tell me the subcategory name you want to delete.";
+	        			speechText = "Please tell me the subcategory name you want to delete along with parent category name.";
 	        		}
 	        		else
 	        			speechText = "Please provide appropriate action for sub-category.";

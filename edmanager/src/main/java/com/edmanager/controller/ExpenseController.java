@@ -74,7 +74,7 @@ public class ExpenseController {
 				}
 				else
 					expense.setSubCategoryId(-1);
-				
+				expense.setUser(user);
 				expenseRepository.save(expense);
 				
 				return new Response(Constants.SUCCESS,"Expense has been added.",null);
