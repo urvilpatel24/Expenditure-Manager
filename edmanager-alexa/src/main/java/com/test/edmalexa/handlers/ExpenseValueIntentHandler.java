@@ -3,7 +3,6 @@ package com.test.edmalexa.handlers;
 import static com.amazon.ask.request.Predicates.intentName;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -38,22 +37,28 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	
 	        System.out.println("Inside ExpenseValueIntent 1 ...");
 	        String speechText = "";
-	        Slot amountSlot = slots.get("amount");
+	        Slot dateSlot = slots.get("date");
 	        System.out.println("Inside ExpenseValueIntent 2...");
-	        if(amountSlot != null && amountSlot.getValue() != null)
+	        if(dateSlot != null && dateSlot.getValue() != null)
 	        {
 	        	System.out.println("Inside If ...");
 	            
-	        	Slot dateSlot = slots.get("date");
 		        Slot categorySlot = slots.get("category");
 		        Slot subCategorySlot = slots.get("subCategory");
 		        Slot accountSlot = slots.get("account");
+		        Slot amountSlot = slots.get("amount");
 		        
 	        	long date = 0L;
+	        	String ds = "";
 	        	String amount = "";
 	        	String category = "";
 	        	String account = "";
 	        	String subCategory = "";
+	        	
+	        	if(amountSlot != null && amountSlot.getValue() != null)
+	        		amount = amountSlot.getValue();
+	        	else
+	        		amount = "0";
 	        	
 	        	if(subCategorySlot != null && subCategorySlot.getValue() != null)
 	        		subCategory = subCategorySlot.getValue();
@@ -70,8 +75,10 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        	else
 	        		account = "Cash";
 	        	
-	        	if(dateSlot != null && dateSlot.getValue() != null)
-	        		date = this.formatDate(dateSlot.getValue());
+	        	if(dateSlot != null && dateSlot.getValue() != null) {
+	        		ds = dateSlot.getValue();
+	        		date = this.formatDate(ds);
+	        	}
 	        	else
 	        		date = this.formatDate("");
 	        	
@@ -142,7 +149,38 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 	        		}
 	        		else if(currentAction.equalsIgnoreCase("analyse")) {
 	        			System.out.println("Inside expense analyse ...");
-	        			JsonObject res = RestUtil.call(Constants.GET, "/analyse/byCategoryAndDate?userId=1&startDate="+date+"&endDate="+date+"&category="+category);
+	        			long s = 0L;
+	        			long e = 0L;
+	        			if(ds.equals("2021-11-30")) {
+	        				s = fmtDate(ds);
+	        				e = formatDate(ds);
+	        			}
+	        			else {
+	        				s = formatDate(ds);
+	        				e = fmtDate(ds);
+	        			}
+	        			JsonObject res = RestUtil.call(Constants.GET, "/analyse/byCategoryAndDate?userId=1&startDate="+s+"&endDate="+e+"&category="+category);
+	        			if(res.get(Constants.STATUS).toString() != null && !res.get(Constants.STATUS).toString().isEmpty())
+	        				speechText = res.get(Constants.MESSAGE).toString();
+	        			else
+	        				speechText = Constants.ERR_MSG_SERVER;
+	        			
+	        			map.put("CURRENT_MODULE", "");
+	        			map.put("CURRENT_ACTION", "");
+	        		}
+	        		else if(currentAction.equalsIgnoreCase("email")) {
+	        			System.out.println("Inside email analyse ...");
+	        			long s = 0L;
+	        			long e = 0L;
+	        			if(ds.equals("2021-11-30")) {
+	        				s = fmtDate(ds);
+	        				e = formatDate(ds);
+	        			}
+	        			else {
+	        				s = formatDate(ds);
+	        				e = fmtDate(ds);
+	        			}
+	        			JsonObject res = RestUtil.call(Constants.GET, "/analyse/email?userId=1&startDate="+s+"&endDate="+e);
 	        			if(res.get(Constants.STATUS).toString() != null && !res.get(Constants.STATUS).toString().isEmpty())
 	        				speechText = res.get(Constants.MESSAGE).toString();
 	        			else
@@ -192,12 +230,18 @@ public class ExpenseValueIntentHandler implements RequestHandler {
 		}
 	}
 	
-	/*private long generateEndDate(long date) throws Exception {
+	private long fmtDate(String date) throws Exception {
 		try {
-			
+			if(date.equals("2021-11-29"))
+				return formatDate("2021-12-05");
+			else if(date.equals("2021-11-22"))
+				return formatDate("2021-11-28");
+			else if(date.equals("2021-11-30"))
+				return formatDate("2021-11-01");
+			else return formatDate(date);
 		}
 		catch(Exception e) {
-			return 0;
+			return 0L;
 		}
-	}*/
+	}
 }

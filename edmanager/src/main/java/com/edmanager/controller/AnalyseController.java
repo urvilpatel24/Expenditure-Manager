@@ -14,6 +14,7 @@ import com.edmanager.model.Response;
 import com.edmanager.repository.CategoryRepository;
 import com.edmanager.repository.ExpenseRepository;
 import com.edmanager.util.Constants;
+import com.edmanager.util.MailUtil;
 
 @RestController
 @RequestMapping("/analyse")
@@ -35,6 +36,19 @@ public class AnalyseController {
 			logger.info("analyse expenses by Category and date : "+category+" : "+startDate+" : "+endDate);
 			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
 			return new Response(Constants.SUCCESS,Constants.SUCCESS,expenseRepository.findAllByDatesAndCategoryAndUser_Id(startDate, endDate, cat.getId(), userId));
+		}catch(Exception e) {
+			logger.error("Exception in byCategoryAndDate API", e);
+			return new Response(Constants.EXCEPTION,"There is a problem in fetching the results.",null);
+		}
+    }
+	
+	@ResponseBody
+	@GetMapping("/email")
+    public Response email(@RequestParam("startDate") long startDate, @RequestParam("endDate") long endDate, @RequestParam("userId") long userId){
+		try {
+			logger.info("email analyse expenses : "+startDate+" : "+endDate);
+			MailUtil.send(Constants.EMAIL, "Expenditure Manager - Expense report", "", "Expenditure Manager");
+			return new Response(Constants.SUCCESS,"I have sent an analysis report on your registerd Email.",null);
 		}catch(Exception e) {
 			logger.error("Exception in byCategoryAndDate API", e);
 			return new Response(Constants.EXCEPTION,"There is a problem in fetching the results.",null);
