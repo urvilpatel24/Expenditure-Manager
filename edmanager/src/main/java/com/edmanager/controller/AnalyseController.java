@@ -1,5 +1,9 @@
 package com.edmanager.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edmanager.model.Category;
+import com.edmanager.model.Expense;
 import com.edmanager.model.Response;
 import com.edmanager.repository.CategoryRepository;
 import com.edmanager.repository.ExpenseRepository;
@@ -35,7 +40,15 @@ public class AnalyseController {
 		try {
 			logger.info("analyse expenses by Category and date : "+category+" : "+startDate+" : "+endDate);
 			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
-			return new Response(Constants.SUCCESS,Constants.SUCCESS,expenseRepository.findAllByDatesAndCategoryAndUser_Id(startDate, endDate, cat.getId(), userId));
+			List<Expense> list = expenseRepository.findAllByDatesAndCategoryAndUser_Id(startDate, endDate, cat.getId(), userId);
+			String res = "You have "+list.size()+" expenses for category "+cat.getName()+". ";
+			double amt = 0;
+			for(Expense e: list) {
+				res.concat("You spent "+e.getAmount()+"  CAD in "+e.getCategory().getName()+" on "+formatDate(e.getDate())+" .");
+				amt += e.getAmount();
+			}
+			res.concat("In total you spent "+amt+" CAD.");
+			return new Response(Constants.SUCCESS,res,null);
 		}catch(Exception e) {
 			logger.error("Exception in byCategoryAndDate API", e);
 			return new Response(Constants.EXCEPTION,"There is a problem in fetching the results.",null);
@@ -78,5 +91,27 @@ public class AnalyseController {
 			logger.error("Exception in byDate API", e);
 			return null;
 		}
+    }
+	
+	private String formatDate(long epoch) {
+        try
+        {
+        	logger.info(" >>> epoch="+epoch);
+            
+        	Date date = new Date(epoch);
+            logger.info("Date="+date);
+            
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+            String formattedDate = formatter.format(date);
+            logger.info("formattedDate="+formattedDate);
+            
+            return formattedDate;
+        }
+        catch (Exception e)
+        {
+            logger.error("Exception at formatDateDDMMMYYYY >>> ",e);
+            e.printStackTrace();
+            return "";
+        }
     }
 }
