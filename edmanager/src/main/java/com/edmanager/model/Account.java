@@ -29,17 +29,17 @@ public class Account {
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@Column(name = "current_balance", nullable = false)
-	private double currentBalance;
+	/*@Column(name = "current_balance", nullable = false)
+	private double currentBalance;*/
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_users_fk",nullable = false)
     private Users user;
 
-	public Account(String name, double currentBalance, Users user) {
+	public Account(String name, Users user) {
 		super();
 		this.name = name;
-		this.currentBalance = currentBalance;
+//		this.currentBalance = currentBalance;
 		this.user = user;
 	}
 	

@@ -43,7 +43,7 @@ public class SubCategoryController {
 			return new Response(Constants.SUCCESS,"",subCategoryRepository.findAllByCategory_IdAndUser_Id(category.getId(), userId));
 		}catch(Exception e) {
 			logger.error("Exception in getAll API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in fetching sub-categories.",null);
 		}
     }
 	
@@ -62,10 +62,12 @@ public class SubCategoryController {
 				subCategory = subCategoryRepository.save(subCategory);
 				logger.info("New subCategory has been created for user="+user.getName()+", subCategory-name = "+subCategory.getName());
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,subCategory.getName()+" has been added as sub category.",null);
 		}catch(Exception e) {
 			logger.error("Exception in addSubCategory API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in adding sub-category.",null);
 		}
     }
 	
@@ -84,10 +86,12 @@ public class SubCategoryController {
 				subCategory = subCategoryRepository.save(subCategory);
 				logger.info("SubCategory has been edited for user="+user.getName()+",subCategory-name="+subCategory.getName());
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,"SubCategory name has been changed to "+subCategory.getName(),null);
 		}catch(Exception e) {
 			logger.error("Exception in editSubCategory API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in updating sub-category.",null);
 		}
     }
 
@@ -103,10 +107,12 @@ public class SubCategoryController {
 				subCategoryRepository.delete(subCategory);
 				logger.info("SubCategory has been deleted for user="+user.getName()+", act-name="+name);
 			}
+			else
+				return new Response(Constants.ERROR,"Provided data is incorrect.",null);
 			return new Response(Constants.SUCCESS,subCategory.getName()+" has been deleted.",null);
 		}catch(Exception e) {
 			logger.error("Exception in deleteSubCategory API", e);
-			return null;
+			return new Response(Constants.EXCEPTION,"There is a problem in deleting sub-category.",null);
 		}
     }
 }

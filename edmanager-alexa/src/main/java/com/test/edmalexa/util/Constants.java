@@ -2,6 +2,7 @@ package com.test.edmalexa.util;
 
 public class Constants {
 
+	public static final String ERR_MSG_SERVER = "There is a issue in response. Plese try again.";
 	public static final String ERR_MSG = "Something went wrong. Plese try again.";
 	public static final String REPROMPT = "I am not sure about this information. Please try again.";
 	public static final String SUCCESS = "success";
