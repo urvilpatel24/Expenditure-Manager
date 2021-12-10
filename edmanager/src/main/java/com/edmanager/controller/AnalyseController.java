@@ -35,11 +35,11 @@ public class AnalyseController {
 	
 	@ResponseBody
 	@GetMapping("/byCategoryAndDate")
-    public Response byCategoryAndDate(@RequestParam("startDate") long startDate, 
+    public Response byCategoryAndDate(@RequestParam("startDate") long startDate, @RequestParam("category") String category, 
     		@RequestParam("endDate") long endDate, @RequestParam("userId") long userId){
 		try {
 			logger.info("analyse expenses by Category and date : : "+startDate+" : "+endDate);
-			Category cat = categoryRepository.findByNameAndUser_Id("household", userId);
+			Category cat = categoryRepository.findByNameAndUser_Id(category, userId);
 			List<Expense> list = expenseRepository.findAllByDatesAndCategory_IdAndUser_Id(startDate, endDate, cat.getId(), userId);
 			String res = "You have "+list.size()+" expenses for category "+cat.getName()+". ";
 			double amt = 0;
